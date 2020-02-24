@@ -4,8 +4,10 @@ import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
-import { Chat } from './chat';
+import { Channel } from './channel';
+import { User } from './user';
 
 @Entity()
 export class Message {
@@ -13,13 +15,18 @@ export class Message {
   public id: number;
   @Column()
   public text: string;
-  @Column()
+  @ManyToOne(
+    type => User,
+    user => user.messages,
+  )
   public sender: string;
   @ManyToOne(
-    type => Chat,
+    type => Channel,
     chat => chat.messages,
+    { lazy: true },
   )
-  public chat: Chat;
+  @JoinColumn()
+  public chat: Channel;
 
   @CreateDateColumn()
   public created_at: Date;
