@@ -8,10 +8,13 @@ import { JWT_SECRET } from 'src/constants';
 import { JwtStrategy } from 'src/strategies/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/models/user';
+import { GoogleStrategy } from 'src/strategies/google';
+import { UserModule } from './user';
 
 @Module({
   imports: [
     PassportModule,
+    UserModule,
     JwtModule.register({
       secret: JWT_SECRET,
       signOptions: { expiresIn: '1h' },
@@ -19,6 +22,6 @@ import { User } from 'src/models/user';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [SessionController],
-  providers: [AuthService, JwtStrategy, LocalStrategy],
+  providers: [AuthService, JwtStrategy, LocalStrategy, GoogleStrategy],
 })
 export class AuthModule {}

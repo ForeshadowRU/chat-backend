@@ -6,7 +6,9 @@ import { Message } from 'src/models/message';
 import { Channel } from 'src/models/channel';
 import { Server } from 'src/models/server';
 import { User } from 'src/models/user';
+import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth';
+import { UserModule } from './user';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { AuthModule } from './auth';
       entities: [Message, Channel, Server, User],
       synchronize: true,
     }),
+    ConfigModule.forRoot(),
+    UserModule,
     ChatModule,
     AuthModule,
   ],

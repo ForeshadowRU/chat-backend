@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   PrimaryColumn,
   ManyToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Message } from './message';
 import { Channel } from './channel';
@@ -13,17 +14,21 @@ import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
+  @PrimaryGeneratedColumn()
+  public id: number;
   @Column({ unique: true })
   public email: string;
-  @PrimaryColumn({ unique: true })
+  @Column({ unique: true })
   public username: string;
-  @Column('char', { length: 60 })
+  @Column('char', { length: 60, nullable: true }) // GoogleAccounts doesn't store passwords :)
   @Exclude()
   public password: string;
   @Column()
   public firstname: string;
   @Column()
   public lastname: string;
+  @Column()
+  public isGoogleAccount: Boolean;
   @ManyToMany(
     type => Channel,
     channel => channel.users,
