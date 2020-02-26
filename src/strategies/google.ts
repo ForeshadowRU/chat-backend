@@ -23,8 +23,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   ) {
     try {
       console.log(profile);
+      const result = {
+        firstname: profile.name.giveName,
+        lastname: profile.name.familyName,
+        avatar: profile.photos[0].value,
+      };
 
-      const jwt: string = 'placeholderJWT';
+      const jwt: string = JSON.stringify(result);
       const user = {
         jwt,
       };

@@ -1,8 +1,25 @@
-import { Controller, Get, UseGuards, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Req,
+  Res,
+  Post,
+  Body,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { CreateUserDto } from 'src/dto/CreateUserDto';
+import { UserService } from 'src/services/user';
 
 @Controller('auth/')
 export class SessionController {
+  constructor(public userService: UserService) {}
+  @Post()
+  register(@Body() createUserDto: CreateUserDto) {
+    this.userService.save(createUserDto);
+    return 'This action adds a new user';
+  }
+
   @Get('google')
   @UseGuards(AuthGuard('google'))
   googleLogin() {}
