@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsBoolean, ValidateIf } from 'class-validator';
 
-export class CreateUserDto {
+export class CreateUserRequest {
   @IsEmail({}, { message: 'Invalid email' })
   email: string;
   @IsNotEmpty({ message: '$property is requried' })

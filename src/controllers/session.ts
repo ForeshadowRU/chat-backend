@@ -8,23 +8,35 @@ import {
   Body,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { CreateUserDto } from 'src/dto/CreateUserDto';
+import { CreateUserRequest } from 'src/dto/requests/CreateUserRequest';
 import { UserService } from 'src/services/user';
+import { AuthService } from 'src/services/auth';
+import { LoginRequest } from 'src/dto/requests/LoginRequest';
+import { LoginResponse } from 'src/dto/responses/LoginResponse';
 
-@Controller('auth/')
+@Controller('auth')
 export class SessionController {
-  constructor(public userService: UserService) {}
-  @Post()
-  register(@Body() createUserDto: CreateUserDto) {
-    this.userService.save(createUserDto);
-    return 'This action adds a new user';
+  constructor(
+    public userService: UserService,
+    public authService: AuthService,
+  ) {}
+  @Post('/register')
+  async register(@Body() createUserDto: CreateUserRequest): Promise<any> {
+    const user = await this.userService.save(createUserDto);
+    const token = await this.authService.login(user);
+    return { ...user, ...token };
+  }
+  @UseGuards(AuthGuard('local'))
+  @Post('/login')
+  async login(@Body() loginDto: LoginRequest): Promise<LoginResponse> {
+    return this.authService.login(loginDto);
   }
 
-  @Get('google')
+  @Get('/google')
   @UseGuards(AuthGuard('google'))
   googleLogin() {}
 
-  @Get('callback')
+  @Get('/callback')
   @UseGuards(AuthGuard('google'))
   googleLoginCallback(@Req() req, @Res() res) {
     // handles the Google OAuth2 callback

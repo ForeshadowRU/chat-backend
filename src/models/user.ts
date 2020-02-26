@@ -6,6 +6,7 @@ import {
   PrimaryColumn,
   ManyToMany,
   PrimaryGeneratedColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Message } from './message';
 import { Channel } from './channel';
@@ -41,6 +42,7 @@ export class User {
   public servers: Array<Server>;
 
   public messages: Array<Message>;
+
   @CreateDateColumn()
   public registred_at: Date;
   @UpdateDateColumn()

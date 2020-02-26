@@ -6,6 +6,7 @@ import {
   ManyToMany,
   JoinTable,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Message } from './message';
 import { User } from './user';
@@ -25,6 +26,11 @@ export class Channel {
   @JoinTable()
   public users: Array<User>;
 
+  @ManyToOne(
+    type => Server,
+    server => server.channells,
+    { cascade: true },
+  )
   @JoinColumn()
   public server: Server;
 

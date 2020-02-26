@@ -26,11 +26,6 @@ export class Server {
   )
   @JoinTable()
   public members: Array<User>;
-  @ManyToOne(
-    type => Channel,
-    channel => channel.server,
-    { cascade: true },
-  )
-  @JoinTable()
+
   public channells: Array<Channel>;
 }

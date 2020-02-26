@@ -3,8 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/models/user';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { hash, compare } from 'bcrypt';
-import { JWT_GEN_SALT_ROUNDS } from 'src/constants';
+import { compare } from 'bcrypt';
+
+import { LoginRequest } from 'src/dto/requests/LoginRequest';
+import { LoginResponse } from 'src/dto/responses/LoginResponse';
 
 @Injectable()
 export class AuthService {
@@ -15,8 +17,7 @@ export class AuthService {
   async validateUser(login: string, pass: string): Promise<any> {
     const user = await this.users.findOne({ username: login });
     if (!user) throw new UnauthorizedException('Wrong username/password');
-    let passwordHash = await hash(pass, JWT_GEN_SALT_ROUNDS);
-    let equals = await compare(passwordHash, user.password);
+    let equals = await compare(pass, user.password);
 
     if (equals) {
       return user;
@@ -24,13 +25,10 @@ export class AuthService {
 
     throw new UnauthorizedException('Wrong username/password');
   }
-  async login(user: any) {
-    if (!user)
-      throw new UnauthorizedException(HttpCode(401), 'Bad credentials');
-    const payload = { id: user.user.id, login: user.user.email };
-
+  async login(user: LoginRequest): Promise<LoginResponse> {
+    const payload = { username: user.username };
     return {
-      access_token: this.jwtService.sign(payload),
+      auth_token: this.jwtService.sign(payload),
     };
   }
   async me(username: string) {
