@@ -26,7 +26,7 @@ export class Message {
     { lazy: true },
   )
   @JoinColumn()
-  public chat: Channel;
+  public channel: Channel;
 
   @CreateDateColumn()
   public created_at: Date;

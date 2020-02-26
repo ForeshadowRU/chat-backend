@@ -39,6 +39,7 @@ export class User {
     server => server.members,
   )
   public servers: Array<Server>;
+
   public messages: Array<Message>;
   @CreateDateColumn()
   public registred_at: Date;

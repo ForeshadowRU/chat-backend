@@ -5,8 +5,11 @@ import {
   UpdateDateColumn,
   PrimaryGeneratedColumn,
   ManyToMany,
+  JoinTable,
+  ManyToOne,
 } from 'typeorm';
 import { User } from './user';
+import { Channel } from './channel';
 
 @Entity()
 export class Server {
@@ -21,5 +24,13 @@ export class Server {
     user => user.servers,
     { cascade: true },
   )
+  @JoinTable()
   public members: Array<User>;
+  @ManyToOne(
+    type => Channel,
+    channel => channel.server,
+    { cascade: true },
+  )
+  @JoinTable()
+  public channells: Array<Channel>;
 }

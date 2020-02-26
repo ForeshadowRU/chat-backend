@@ -5,9 +5,11 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
+  JoinColumn,
 } from 'typeorm';
 import { Message } from './message';
 import { User } from './user';
+import { Server } from './server';
 
 @Entity()
 export class Channel {
@@ -22,6 +24,10 @@ export class Channel {
   )
   @JoinTable()
   public users: Array<User>;
+
+  @JoinColumn()
+  public server: Server;
+
   public messages: Array<Message>;
   @CreateDateColumn()
   public created_at: Date;
