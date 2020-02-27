@@ -9,6 +9,7 @@ import { User } from 'src/models/user';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth';
 import { UserModule } from './user';
+import { AppController } from 'src/controllers/main';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserModule } from './user';
       password: '123',
       database: 'shadowchat',
       entities: [Message, Channel, Server, User],
+      charset: 'utf8mb4',
       synchronize: true,
     }),
     ConfigModule.forRoot(),
@@ -27,7 +29,7 @@ import { UserModule } from './user';
     ChatModule,
     AuthModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}

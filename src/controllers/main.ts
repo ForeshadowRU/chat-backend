@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards, Req } from '@nestjs/common';
 import { AppService } from '../services/main';
+import { AuthGuard } from '@nestjs/passport';
 
-@Controller()
+@Controller('/')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getHello(@Req() req): string {
+    return 'Access granted ' + req.user.username;
   }
 }
