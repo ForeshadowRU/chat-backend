@@ -8,6 +8,6 @@ fi
 ROOT_DIR=$(dirname "${BUILD_ROOT_DIR}")
 cd ${ROOT_DIR}
 
-nvm use 13.0.9
-npm install
-npm run start
+/home/foreshadow/.nvm/.sh use 13.0.9
+/home/foreshadow/.nvm/versions/node/v13.9.0/bin/npm install
+/home/foreshadow/.nvm/versions/node/v13.9.0/bin/npm npm run start
