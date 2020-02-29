@@ -21,6 +21,6 @@ async function bootstrap() {
       exceptionFactory: exceptionFactory,
     }),
   );
-  await app.listen(3002);
+  await app.listen(8080);
 }
 bootstrap();
