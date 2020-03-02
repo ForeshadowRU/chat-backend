@@ -10,11 +10,15 @@ import { User } from 'src/models/user';
 @Injectable()
 export class ServerService {
   constructor(
-    @InjectRepository(Message) public messages: Repository<Message>,
-    @InjectRepository(Channel) public channels: Repository<Channel>,
-    @InjectRepository(Server) public servers: Repository<Server>,
-    @InjectRepository(User) public users: Repository<User>,
+    @InjectRepository(Message) private messages: Repository<Message>,
+    @InjectRepository(Channel) private channels: Repository<Channel>,
+    @InjectRepository(Server) private servers: Repository<Server>,
+    @InjectRepository(User) private users: Repository<User>,
   ) {}
+
+  getServerList() {
+    return this.servers.find({ relations: ['members'] });
+  }
 
   getServerInfo(id: string): Promise<Server> {
     return this.servers.findOne({ id });
@@ -28,7 +32,14 @@ export class ServerService {
     for await (let member of server.members) {
       members.push(await this.users.findOne({ id: member }));
     }
-
-    return members;
+    let channel = new Channel();
+    channel.name = 'General';
+    channel.users = members;
+    let newServer: Server = {
+      ...server,
+      channells: [channel],
+      members: members,
+    };
+    return this.servers.save(newServer);
   }
 }

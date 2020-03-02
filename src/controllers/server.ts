@@ -13,6 +13,11 @@ export class ServerController {
     private readonly userService: UserService,
   ) {}
 
+  @Get('/')
+  getServerList() {
+    return this.serverService.getServerList();
+  }
+
   @Get('/:id/channels')
   getAllChannelsInProject(@Param() serverId: string): Promise<Array<Channel>> {
     return this.serverService.getChannels(serverId);

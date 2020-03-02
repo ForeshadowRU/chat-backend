@@ -1,12 +1,9 @@
 import {
   Entity,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
-  ManyToOne,
   OneToMany,
 } from 'typeorm';
 import { User } from './user';
@@ -15,22 +12,22 @@ import { Channel } from './channel';
 @Entity()
 export class Server {
   @PrimaryGeneratedColumn('uuid')
-  public id: string;
+  public id?: string;
   @Column()
-  public name: string;
+  public name!: string;
   @Column()
-  public description: string;
+  public description!: string;
   @ManyToMany(
-    type => User,
+    () => User,
     user => user.servers,
     { cascade: true },
   )
   @JoinTable()
-  public members: Array<User>;
+  public members!: Array<User>;
   @OneToMany(
     _ => Channel,
     () => undefined,
     { cascade: true },
   )
-  public channells: Array<Channel>;
+  public channells!: Array<Channel>;
 }
