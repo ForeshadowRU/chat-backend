@@ -23,7 +23,12 @@ export class ServerService {
   getChannels(serverId: string): Promise<Array<Channel>> {
     return this.channels.find({ where: { server: serverId } });
   }
-  async createNewServer(server: CreateServerRequest): Promise<Server> {
-    return;
+  async createNewServer(server: CreateServerRequest): Promise<any> {
+    let members = new Array<User>();
+    for await (let member of server.members) {
+      members.push(await this.users.findOne({ id: member }));
+    }
+
+    return members;
   }
 }

@@ -6,6 +6,5 @@ export class LoginRequest {
   @ValidateIf(dto => !dto.isGoogleAccount)
   @IsNotEmpty({ message: '$property is required' })
   password: string;
-  @IsBoolean({ message: `$property only accepts true/false values` })
   isGoogleAccount: Boolean;
 }

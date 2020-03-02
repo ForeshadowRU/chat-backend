@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 
 export class CreateServerRequest {
-  @IsEmail({}, { message: 'Invalid email' })
+  @IsNotEmpty({ message: '$property is required' })
   name: string;
   @IsNotEmpty({ message: '$property is requried' })
   description: string;

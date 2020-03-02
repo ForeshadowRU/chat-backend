@@ -12,6 +12,7 @@ export class CreateUserRequest {
   @ValidateIf(dto => !dto.isGoogleAccount)
   @IsNotEmpty({ message: '$property is required' })
   password: string;
+  @ValidateIf(dto => !!dto.isGoogleAccount)
   @IsBoolean({ message: `$property only accepts true/false values` })
   isGoogleAccount: Boolean;
 }

@@ -30,7 +30,7 @@ export class User {
   public firstname: string;
   @Column()
   public lastname: string;
-  @Column()
+  @Column({ default: false })
   public isGoogleAccount: Boolean;
   @ManyToMany(
     type => Channel,
