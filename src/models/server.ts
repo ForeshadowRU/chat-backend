@@ -7,6 +7,7 @@ import {
   ManyToMany,
   JoinTable,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { User } from './user';
 import { Channel } from './channel';
@@ -26,6 +27,10 @@ export class Server {
   )
   @JoinTable()
   public members: Array<User>;
-
+  @OneToMany(
+    _ => Channel,
+    () => undefined,
+    { cascade: true },
+  )
   public channells: Array<Channel>;
 }

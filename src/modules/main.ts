@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ChatModule } from './chat';
+import { ServerModule } from './server';
 import { Message } from 'src/models/message';
 import { Channel } from 'src/models/channel';
 import { Server } from 'src/models/server';
@@ -26,7 +26,7 @@ import { AppController } from 'src/controllers/main';
     }),
     ConfigModule.forRoot(),
     UserModule,
-    ChatModule,
+    ServerModule,
     AuthModule,
   ],
   controllers: [AppController],

@@ -15,11 +15,13 @@ import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
+  @PrimaryGeneratedColumn()
+  public id: number;
   @Column({ unique: true })
   public email: string;
   @Column({ nullable: true })
   public avatar: string;
-  @PrimaryColumn({ unique: true })
+  @Column({ unique: true })
   public username: string;
   @Column('char', { length: 60, nullable: true }) // GoogleAccounts doesn't store passwords :)
   @Exclude()

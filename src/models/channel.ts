@@ -29,7 +29,6 @@ export class Channel {
   @ManyToOne(
     type => Server,
     server => server.channells,
-    { cascade: true },
   )
   @JoinColumn()
   public server: Server;
