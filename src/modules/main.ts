@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, DynamicModule } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServerModule } from './server';
@@ -10,20 +10,16 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth';
 import { UserModule } from './user';
 import { AppController } from 'src/controllers/main';
+import * as ormconfig from 'src/database/ormconfig';
+export function DatabaseOrmModule(): DynamicModule {
+  // we could load the configuration from dotEnv here,
+  // but typeORM cli would not be able to find the configuration file.
 
+  return TypeOrmModule.forRoot(ormconfig);
+}
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '123',
-      database: 'shadowchat',
-      entities: [Message, Channel, Server, User],
-      charset: 'utf8mb4',
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(ormconfig),
     ConfigModule.forRoot(),
     UserModule,
     ServerModule,
