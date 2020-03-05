@@ -1,4 +1,5 @@
 import { ConnectionOptions } from 'typeorm';
+import { join } from 'path';
 
 const config: ConnectionOptions = {
   type: 'mysql',
@@ -7,14 +8,14 @@ const config: ConnectionOptions = {
   username: 'root',
   password: '123',
   database: 'shadowchat',
-  entities: [__dirname + '/../models/*.{ts,js}'],
+  entities: [join(__dirname, '/../models/*.{ts,js}')],
   synchronize: false,
   migrationsRun: true,
   logging: true,
   logger: 'file',
-  migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
+  migrations: [join(__dirname, '/migrations/**/*{.ts,.js}')],
   cli: {
-    migrationsDir: __dirname + '/migrations/',
+    migrationsDir: join(__dirname, '/migrations/'),
   },
 };
 

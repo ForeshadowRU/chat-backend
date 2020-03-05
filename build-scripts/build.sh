@@ -8,7 +8,7 @@ then
 fi
 ROOT_DIR=$(dirname "${BUILD_ROOT_DIR}")
 cd ${ROOT_DIR}
-ls -alF ~/ | echo
+
 
 /home/foreshadow/.nvm/nvm.sh use 13.0.9
 killall node
