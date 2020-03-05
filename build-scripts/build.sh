@@ -12,7 +12,6 @@ ls -alF ~/ | echo
 
 /home/foreshadow/.nvm/nvm.sh use 13.0.9
 killall node
-npm run typeorm:migrate
 npm run typeorm:run
 npm install
 npm run build

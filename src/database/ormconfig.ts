@@ -14,7 +14,7 @@ const config: ConnectionOptions = {
   logger: 'file',
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   cli: {
-    migrationsDir: 'src/migrations',
+    migrationsDir: __dirname + '/migrations/',
   },
 };
 

@@ -13,6 +13,11 @@ import { Channel } from './channel';
 import { Server } from './server';
 import { Exclude } from 'class-transformer';
 
+export enum UserStatus {
+  ONLINE,
+  OFFLINE,
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -28,6 +33,8 @@ export class User {
   public password: string;
   @Column()
   public firstname: string;
+  @Column()
+  public status: UserStatus;
   @Column()
   public lastname: string;
   @Column({ default: false })
