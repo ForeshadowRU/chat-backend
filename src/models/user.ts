@@ -33,7 +33,7 @@ export class User {
   public password: string;
   @Column()
   public firstname: string;
-  @Column()
+  @Column({ default: UserStatus.ONLINE })
   public status: UserStatus;
   @Column()
   public lastname: string;

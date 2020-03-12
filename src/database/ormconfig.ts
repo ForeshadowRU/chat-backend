@@ -10,12 +10,13 @@ const config: ConnectionOptions = {
   database: 'shadowchat',
   entities: [join(__dirname, '/../models/*.{ts,js}')],
   synchronize: false,
+  charset: 'utf8mb4',
   migrationsRun: true,
   logging: true,
   logger: 'file',
   migrations: [join(__dirname, '/migrations/**/*{.ts,.js}')],
   cli: {
-    migrationsDir: join(__dirname, '/migrations/'),
+    migrationsDir: 'src/database/migrations',
   },
 };
 

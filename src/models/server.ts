@@ -14,20 +14,20 @@ export class Server {
   @PrimaryGeneratedColumn('uuid')
   public id?: string;
   @Column()
-  public name!: string;
+  public name: string;
   @Column()
-  public description!: string;
+  public description: string;
   @ManyToMany(
     () => User,
     user => user.servers,
     { cascade: true },
   )
   @JoinTable()
-  public members!: Array<User>;
+  public members: Array<User>;
   @OneToMany(
     _ => Channel,
     () => undefined,
     { cascade: true },
   )
-  public channells!: Array<Channel>;
+  public channells: Array<Channel>;
 }
