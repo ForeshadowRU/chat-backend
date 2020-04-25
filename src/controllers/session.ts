@@ -6,6 +6,8 @@ import {
   Res,
   Post,
   Body,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserRequest } from 'src/dto/requests/CreateUserRequest';
@@ -13,7 +15,7 @@ import { UserService } from 'src/services/user';
 import { AuthService } from 'src/services/auth';
 import { LoginRequest } from 'src/dto/requests/LoginRequest';
 import { LoginResponse } from 'src/dto/responses/LoginResponse';
-
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('auth')
 export class SessionController {
   constructor(
@@ -22,9 +24,9 @@ export class SessionController {
   ) {}
   @Post('/register')
   async register(@Body() createUserDto: CreateUserRequest): Promise<any> {
-    const user = await this.userService.save(createUserDto);
+    const user = (await this.userService.save(createUserDto)).toPlain();
     const token = await this.authService.login(user);
-    return { ...user, ...token };
+    return { ...user, auth_token: token.auth_token };
   }
   @UseGuards(AuthGuard('local'))
   @Post('/login')

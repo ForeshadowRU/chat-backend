@@ -15,7 +15,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
   async validateUser(login: string, pass: string): Promise<any> {
-    const user = await this.users.findOne({ username: login });
+    const user = await this.users.findOne({
+      where: [{ username: login }, { email: login }],
+    });
     if (!user) throw new UnauthorizedException('Wrong username/password');
     let equals = await compare(pass, user.password);
 
@@ -27,8 +29,14 @@ export class AuthService {
   }
   async login(user: LoginRequest): Promise<LoginResponse> {
     const payload = { username: user.username };
+    const entity: User = (
+      await this.users.findOne({
+        where: [{ username: user.username }, { email: user.username }],
+      })
+    ).toPlain();
     return {
       auth_token: this.jwtService.sign(payload),
+      ...entity,
     };
   }
   async me(username: string) {

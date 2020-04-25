@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { ServerService } from 'src/services/server';
 import { Message } from 'src/models/message';
 import { Channel } from 'src/models/channel';
@@ -13,18 +13,15 @@ export class ServerController {
     private readonly userService: UserService,
   ) {}
 
-  @Get('/')
-  getServerList() {
-    return this.serverService.getServerList();
+  @Get('/channels')
+  getChannels(
+    @Query('private') isPrivate: boolean | undefined,
+  ): Promise<Array<Channel>> {
+    return this.serverService.getChannels(isPrivate);
   }
 
-  @Get('/:id/channels')
-  getAllChannelsInProject(@Param() serverId: string): Promise<Array<Channel>> {
-    return this.serverService.getChannels(serverId);
-  }
-
-  @Post()
-  createNewServer(@Body() server: CreateServerRequest): Promise<Server> {
-    return this.serverService.createNewServer(server);
+  @Get('/:id/messages')
+  getMessages(@Param() channelId) {
+    return this.serverService.getMessages(channelId);
   }
 }

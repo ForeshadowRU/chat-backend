@@ -11,7 +11,7 @@ import {
 import { Message } from './message';
 import { Channel } from './channel';
 import { Server } from './server';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 export enum UserStatus {
   ONLINE,
@@ -39,6 +39,14 @@ export class User {
   public lastname: string;
   @Column({ default: false })
   public isGoogleAccount: Boolean;
+  @Expose({ name: 'fullname' })
+  getFullName() {
+    return `${this.firstname} ${this.lastname}`;
+  }
+  @Expose({ name: 'initials' })
+  getInitials() {
+    return `${this.firstname[0]} ${this.lastname[0]}`;
+  }
   @ManyToMany(
     type => Channel,
     channel => channel.users,
@@ -56,4 +64,10 @@ export class User {
   public registred_at: Date;
   @UpdateDateColumn()
   public updated_at: Date;
+
+  toPlain() {
+    const plain = { ...this };
+    delete plain.password;
+    return plain;
+  }
 }

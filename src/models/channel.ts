@@ -17,6 +17,9 @@ export class Channel {
   @PrimaryGeneratedColumn()
   public id: number;
   @Column()
+  public isPrivate: boolean; //forbid adding new
+
+  @Column()
   public name: string;
   @ManyToMany(
     type => User,
