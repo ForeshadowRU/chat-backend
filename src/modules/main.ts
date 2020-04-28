@@ -6,7 +6,7 @@ import { AuthModule } from './auth';
 import { UserModule } from './user';
 import { AppController } from 'src/controllers/main';
 import * as ormconfig from 'src/database/ormconfig';
-import { ChatModule } from './websockets';
+import { ChatModule } from './chat';
 export function DatabaseOrmModule(): DynamicModule {
   // we could load the configuration from dotEnv here,
   // but typeORM cli would not be able to find the configuration file.

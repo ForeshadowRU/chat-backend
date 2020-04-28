@@ -7,6 +7,7 @@ import {
   JoinTable,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Message } from './message';
 import { User } from './user';
@@ -32,13 +33,10 @@ export class Channel {
   @JoinTable()
   public users: Array<User>;
 
-  @ManyToOne(
-    type => Server,
-    server => server.channells,
+  @OneToMany(
+    type => Message,
+    message => message.channel,
   )
-  @JoinColumn()
-  public server: Server;
-
   public messages: Array<Message>;
   @CreateDateColumn()
   public created_at: Date;

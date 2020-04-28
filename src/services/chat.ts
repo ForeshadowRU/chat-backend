@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { Message } from 'src/models/message';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -9,7 +9,7 @@ import { Channel } from 'src/models/channel';
 export class ChatService {
   constructor(
     @InjectRepository(Message) private readonly messages: Repository<Message>,
-    @InjectRepository(Message) private readonly channels: Repository<Channel>,
+    @InjectRepository(Channel) private readonly channels: Repository<Channel>,
   ) {}
 
   async sendMessage(
@@ -23,5 +23,22 @@ export class ChatService {
       text: message,
     });
     return this.messages.save(msg);
+  }
+
+  async getMessagesFromChannel(channelId: number): Promise<Array<Message>> {
+    const channel = await this.channels.findOne({
+      where: { id: channelId },
+      relations: ['messages', 'messages.sender'],
+      order: {
+        created_at: 'ASC',
+      },
+    });
+    if (!channel)
+      throw new BadRequestException(`No channel with id = ${channelId}`);
+    return channel.messages;
+  }
+  async getChannels(): Promise<Channel[]> {
+    const channels = await this.channels.find();
+    return channels;
   }
 }

@@ -9,11 +9,14 @@ import {
 import { Socket, Client } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/services/user';
+import { User } from 'src/models/user';
+import { ChatService } from 'src/services/chat';
 @WebSocketGateway()
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userServce: UserService,
+    private readonly userService: UserService,
+    private readonly chatService: ChatService,
   ) {}
   @WebSocketServer() server: SocketIO.Server;
   users: number = 0;
@@ -38,7 +41,18 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('message')
-  async onChat(client: Client, message) {
-    return { message: 'ok' };
+  async onChat(client: Socket, message) {
+    const user: User = await this.userService.find(
+      this.jwtService.decode(client.handshake.query.token)['email'],
+    );
+    const msg = await this.chatService.sendMessage(
+      message.text,
+      user,
+      message.channelId,
+    );
+
+    client.broadcast.emit('message', msg);
+    client.emit('message', msg);
+    return msg;
   }
 }

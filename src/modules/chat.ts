@@ -8,9 +8,11 @@ import { JWT_GOOGLE_SECRET } from 'src/constants';
 import { UserModule } from './user';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from 'src/models/message';
+import { ChatController } from 'src/controllers/chat';
+import { Channel } from 'src/models/channel';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Message]),
+    TypeOrmModule.forFeature([Message, Channel]),
     AuthModule,
     UserModule,
     JwtModule.register({
@@ -22,7 +24,7 @@ import { Message } from 'src/models/message';
       },
     }),
   ],
-  controllers: [],
+  controllers: [ChatController],
   providers: [ChatGateway, ChatService],
 })
 export class ChatModule {}
