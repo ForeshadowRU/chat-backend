@@ -6,7 +6,7 @@ import { Server } from 'src/models/server';
 import { CreateServerRequest } from 'src/dto/requests/CreateServerRequest';
 import { UserService } from 'src/services/user';
 
-@Controller('/servers')
+@Controller('/')
 export class ServerController {
   constructor(
     private readonly serverService: ServerService,
@@ -19,9 +19,12 @@ export class ServerController {
   ): Promise<Array<Channel>> {
     return this.serverService.getChannels(isPrivate);
   }
-
+  @Post('/channels')
+  newChannel(): Promise<void> {
+    return this.serverService.createChannel();
+  }
   @Get('/:id/messages')
-  getMessages(@Param() channelId) {
+  getMessages(@Param('id') channelId) {
     return this.serverService.getMessages(channelId);
   }
 }

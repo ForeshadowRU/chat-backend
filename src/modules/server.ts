@@ -8,6 +8,7 @@ import { Channel } from 'src/models/channel';
 import { Server } from 'src/models/server';
 import { User } from 'src/models/user';
 import { UserModule } from './user';
+import { ChatGateway } from 'src/websockets/messages';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { UserModule } from './user';
     UserModule,
   ],
   controllers: [ServerController],
-  providers: [ServerService],
+  providers: [ServerService, ChatGateway],
 })
 export class ServerModule {}

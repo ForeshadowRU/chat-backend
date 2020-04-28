@@ -1,27 +1,29 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from 'src/services/auth';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { SessionController } from 'src/controllers/session';
-import { LocalStrategy } from 'src/strategies/local';
-import { JWT_SECRET } from 'src/constants';
 import { JwtStrategy } from 'src/strategies/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/models/user';
-import { GoogleStrategy } from 'src/strategies/google';
 import { UserModule } from './user';
-
+import { ConfigModule } from '@nestjs/config';
+import { JWT_GOOGLE_SECRET } from 'src/constants';
 @Module({
   imports: [
     PassportModule,
     UserModule,
     JwtModule.register({
-      secret: JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+      secret: JWT_GOOGLE_SECRET,
+      signOptions: {
+        algorithm: 'HS256',
+        issuer: 'shadow-chat',
+        expiresIn: '1h',
+      },
     }),
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [SessionController],
-  providers: [AuthService, JwtStrategy, LocalStrategy, GoogleStrategy],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

@@ -7,6 +7,7 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
   ManyToOne,
+  Table,
 } from 'typeorm';
 import { Message } from './message';
 import { Channel } from './channel';
@@ -26,19 +27,13 @@ export class User {
   public email: string;
   @Column({ nullable: true })
   public avatar: string;
-  @Column({ unique: true })
-  public username: string;
-  @Column('char', { length: 60, nullable: true }) // GoogleAccounts doesn't store passwords :)
-  @Exclude()
-  public password: string;
+  @Column('char', { length: 60, nullable: true })
   @Column()
   public firstname: string;
   @Column({ default: UserStatus.ONLINE })
   public status: UserStatus;
   @Column()
   public lastname: string;
-  @Column({ default: false })
-  public isGoogleAccount: Boolean;
   @Expose({ name: 'fullname' })
   getFullName() {
     return `${this.firstname} ${this.lastname}`;
@@ -64,10 +59,4 @@ export class User {
   public registred_at: Date;
   @UpdateDateColumn()
   public updated_at: Date;
-
-  toPlain() {
-    const plain = { ...this };
-    delete plain.password;
-    return plain;
-  }
 }

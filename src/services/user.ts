@@ -2,7 +2,6 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/models/user';
 import { Repository } from 'typeorm';
-import { CreateUserRequest } from 'src/dto/requests/CreateUserRequest';
 import { hash } from 'bcrypt';
 import { JWT_GEN_SALT_ROUNDS } from 'src/constants';
 
@@ -10,19 +9,17 @@ import { JWT_GEN_SALT_ROUNDS } from 'src/constants';
 export class UserService {
   constructor(@InjectRepository(User) private users: Repository<User>) {}
 
-  async save(user: CreateUserRequest): Promise<User> {
-    if (await this.isUserExist(user))
-      throw new BadRequestException('Username already taken');
-    user.password = await hash(user.password, JWT_GEN_SALT_ROUNDS);
+  async find(email: string) {
+    return this.users.findOne({ where: { email } });
+  }
+
+  async save(user: User): Promise<User> {
     return this.users.save(user);
   }
 
-  async isUserExist(user: {
-    username: string;
-    email: string;
-  }): Promise<Boolean> {
+  async isUserExist(email: string): Promise<Boolean> {
     return !!(await this.users.findOne({
-      where: [{ username: user.username }, { email: user.email }],
+      where: { email },
     }));
   }
 }

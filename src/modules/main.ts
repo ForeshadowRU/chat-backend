@@ -1,11 +1,6 @@
 import { Module, DynamicModule } from '@nestjs/common';
-
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServerModule } from './server';
-import { Message } from 'src/models/message';
-import { Channel } from 'src/models/channel';
-import { Server } from 'src/models/server';
-import { User } from 'src/models/user';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth';
 import { UserModule } from './user';
@@ -17,10 +12,11 @@ export function DatabaseOrmModule(): DynamicModule {
 
   return TypeOrmModule.forRoot(ormconfig);
 }
+
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     UserModule,
     ServerModule,
     AuthModule,
@@ -29,3 +25,4 @@ export function DatabaseOrmModule(): DynamicModule {
   providers: [],
 })
 export class AppModule {}
+console.log(process.env.CLIENT_SECRET);
