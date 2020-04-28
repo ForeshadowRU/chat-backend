@@ -21,7 +21,7 @@ export enum UserStatus {
 
 @Entity()
 export class User {
-  constructor(partial: Partial<User>) {
+  constructor(partial?: Partial<User>) {
     Object.assign(this, partial);
   }
   @PrimaryGeneratedColumn()

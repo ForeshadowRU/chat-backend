@@ -11,7 +11,7 @@ import { User } from './user';
 
 @Entity()
 export class Message {
-  constructor(partial: Partial<Message>) {
+  constructor(partial?: Partial<Message>) {
     Object.assign(this, partial);
   }
   @PrimaryGeneratedColumn()
@@ -22,7 +22,7 @@ export class Message {
     type => User,
     user => user.messages,
   )
-  public sender: string;
+  public sender: User;
   @ManyToOne(
     type => Channel,
     chat => chat.messages,

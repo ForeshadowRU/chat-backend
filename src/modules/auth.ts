@@ -9,6 +9,7 @@ import { User } from 'src/models/user';
 import { UserModule } from './user';
 import { ConfigModule } from '@nestjs/config';
 import { JWT_GOOGLE_SECRET } from 'src/constants';
+import { ChatGateway } from 'src/websockets/messages';
 @Module({
   imports: [
     PassportModule,

@@ -14,7 +14,7 @@ import { Server } from './server';
 
 @Entity()
 export class Channel {
-  constructor(partial: Partial<Channel>) {
+  constructor(partial?: Partial<Channel>) {
     Object.assign(this, partial);
   }
   @PrimaryGeneratedColumn()
