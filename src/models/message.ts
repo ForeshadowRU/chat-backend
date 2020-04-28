@@ -11,6 +11,9 @@ import { User } from './user';
 
 @Entity()
 export class Message {
+  constructor(partial: Partial<Message>) {
+    Object.assign(this, partial);
+  }
   @PrimaryGeneratedColumn()
   public id: number;
   @Column()
