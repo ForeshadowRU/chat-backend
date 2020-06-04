@@ -23,7 +23,7 @@ export class Channel {
   @Column()
   public isPrivate: boolean; //forbid adding new
 
-  @Column()
+  @Column({ unique: true })
   public name: string;
   @ManyToMany(
     type => User,

@@ -25,6 +25,10 @@ export class ChatService {
     return this.messages.save(msg);
   }
 
+  async createChannel(name: string): Promise<Channel> {
+    return this.channels.save(new Channel({ name, isPrivate: false }));
+  }
+
   async getMessagesFromChannel(channelId: number): Promise<Array<Message>> {
     const channel = await this.channels.findOne({
       where: { id: channelId },
@@ -37,6 +41,12 @@ export class ChatService {
       throw new BadRequestException(`No channel with id = ${channelId}`);
     return channel.messages;
   }
+
+  async isChannelExists(name: string | number): Promise<boolean> {
+    const condition = typeof name === 'string' ? { name } : { id: name };
+    return !!this.channels.find({ where: condition });
+  }
+
   async getChannels(): Promise<Channel[]> {
     const channels = await this.channels.find();
     return channels;

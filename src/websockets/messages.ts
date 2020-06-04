@@ -42,17 +42,22 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('message')
   async onChat(client: Socket, message) {
+    console.log('da');
     const user: User = await this.userService.find(
       this.jwtService.decode(client.handshake.query.token)['email'],
     );
-    const msg = await this.chatService.sendMessage(
-      message.text,
-      user,
-      message.channelId,
-    );
-
-    client.broadcast.emit('message', msg);
-    client.emit('message', msg);
-    return msg;
+    console.log(message);
+    try {
+      const msg = await this.chatService.sendMessage(
+        message.text,
+        user,
+        message.channelId,
+      );
+      client.broadcast.emit('message', msg);
+      client.emit('message', msg);
+      return msg;
+    } catch (e) {
+      console.log(e.message);
+    }
   }
 }

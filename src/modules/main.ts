@@ -27,4 +27,3 @@ export function DatabaseOrmModule(): DynamicModule {
   providers: [],
 })
 export class AppModule {}
-console.log(process.env.CLIENT_SECRET);
