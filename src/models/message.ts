@@ -26,7 +26,6 @@ export class Message {
   @ManyToOne(
     type => Channel,
     chat => chat.messages,
-    { lazy: true },
   )
   @JoinColumn()
   public channel: Channel;

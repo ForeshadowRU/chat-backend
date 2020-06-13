@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Message } from 'src/models/message';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,7 +17,24 @@ export class ChatService {
     @InjectRepository(Channel) private readonly channels: Repository<Channel>,
     @InjectRepository(User) private readonly users: Repository<User>,
   ) {}
-
+  async deleteMessage(user: Partial<User>, id: number): Promise<Message[]> {
+    const messageSender = await this.messages.findOne({
+      where: { id },
+      relations: ['sender', 'channel'],
+    });
+    console.log(messageSender);
+    if (!messageSender)
+      throw new NotFoundException('No message with this id is exists');
+    if (user.id !== messageSender.sender.id)
+      throw new ForbiddenException("You can't remove other's users messages");
+    this.messages.delete({ id: id });
+    return await (
+      await this.channels.findOne({
+        where: { id: messageSender.channel.id },
+        relations: ['messages', 'messages.sender'],
+      })
+    ).messages;
+  }
   async sendMessage(
     message: string,
     sender: User,
