@@ -27,9 +27,10 @@ export class SessionController {
   ) {}
 
   @Get('/google')
-  googleLogin(@Req() req): Promise<LoginResponse> {
+  async googleLogin(@Req() req): Promise<LoginResponse> {
     const token = req.headers['authorization'];
-    return this.authService.login(token);
+    let result = await this.authService.login(token);
+    return result;
   }
   @UseGuards(AuthGuard('jwt'))
   @Get('/me')

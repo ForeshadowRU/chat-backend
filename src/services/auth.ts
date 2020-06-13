@@ -13,10 +13,9 @@ export class AuthService {
 
   async login(googleToken: string): Promise<LoginResponse> {
     if (!googleToken) throw new BadRequestException('No token provided.');
+    console.log('token here');
     const decoded = this.jwtService.decode(googleToken);
-    if (decoded['iss'] !== 'accounts.google.com') {
-      throw new BadRequestException('This is not Google Token');
-    }
+
     const data = {
       firstname: decoded['given_name'],
       lastname: decoded['family_name'],

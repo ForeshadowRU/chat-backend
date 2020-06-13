@@ -10,9 +10,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from 'src/models/message';
 import { ChatController } from 'src/controllers/chat';
 import { Channel } from 'src/models/channel';
+import { User } from 'src/models/user';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Message, Channel]),
+    TypeOrmModule.forFeature([Message, Channel, User]),
     AuthModule,
     UserModule,
     JwtModule.register({

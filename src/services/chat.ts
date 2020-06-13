@@ -10,6 +10,7 @@ export class ChatService {
   constructor(
     @InjectRepository(Message) private readonly messages: Repository<Message>,
     @InjectRepository(Channel) private readonly channels: Repository<Channel>,
+    @InjectRepository(User) private readonly users: Repository<User>,
   ) {}
 
   async sendMessage(
@@ -29,7 +30,10 @@ export class ChatService {
     return this.channels.save(new Channel({ name, isPrivate: false }));
   }
 
-  async getMessagesFromChannel(channelId: number): Promise<Array<Message>> {
+  async getMessagesFromChannel(
+    channelId: number,
+    user?: User,
+  ): Promise<Array<Message>> {
     const channel = await this.channels.findOne({
       where: { id: channelId },
       relations: ['messages', 'messages.sender'],
@@ -37,8 +41,10 @@ export class ChatService {
         created_at: 'ASC',
       },
     });
+
     if (!channel)
       throw new BadRequestException(`No channel with id = ${channelId}`);
+    this.users.save({ ...user, last_channel: channelId });
     return channel.messages;
   }
 

@@ -57,7 +57,8 @@ export class User {
   public servers: Array<Server>;
 
   public messages: Array<Message>;
-
+  @Column({ default: 1 })
+  public last_used_channel: number;
   @CreateDateColumn()
   public registred_at: Date;
   @UpdateDateColumn()

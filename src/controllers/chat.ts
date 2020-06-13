@@ -12,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ChatService } from 'src/services/chat';
 import { Message } from 'src/models/message';
 import { Channel } from 'src/models/channel';
+import { CurrentUser } from 'src/decorators/currentUser';
 
 @Controller('/')
 export class ChatController {
@@ -29,8 +30,12 @@ export class ChatController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('channels/:id')
-  getMessagesFromChannel(@Param('id') id: number): Promise<Array<Message>> {
-    return this.chatService.getMessagesFromChannel(id);
+  getMessagesFromChannel(
+    @Param('id') id: number,
+    @CurrentUser() user,
+  ): Promise<Array<Message>> {
+    console.log(user);
+    return this.chatService.getMessagesFromChannel(id, user);
   }
   @UseGuards(AuthGuard('jwt'))
   @Get('channels')
