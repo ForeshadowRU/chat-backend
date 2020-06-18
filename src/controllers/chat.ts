@@ -22,12 +22,13 @@ export class ChatController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post('channels')
-  createChannel(@Body() body: { name: string }): Promise<Channel> {
-    if (this.chatService.isChannelExists(body.name))
+  async createChannel(@Body() body: { name: string }): Promise<Channel[]> {
+    if (await this.chatService.isChannelExists(body.name))
       throw new UnprocessableEntityException(
         'Chat with same name already exists',
       );
-    return this.chatService.createChannel(body.name);
+    await this.chatService.createChannel(body.name);
+    return this.chatService.getChannels();
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -36,7 +37,6 @@ export class ChatController {
     @Param('id') id: number,
     @CurrentUser() user,
   ): Promise<Array<Message>> {
-    console.log(user);
     return this.chatService.getMessagesFromChannel(id, user);
   }
   @UseGuards(AuthGuard('jwt'))

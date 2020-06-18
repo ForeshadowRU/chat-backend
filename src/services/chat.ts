@@ -22,12 +22,11 @@ export class ChatService {
       where: { id },
       relations: ['sender', 'channel'],
     });
-    console.log(messageSender);
     if (!messageSender)
       throw new NotFoundException('No message with this id is exists');
     if (user.id !== messageSender.sender.id)
       throw new ForbiddenException("You can't remove other's users messages");
-    this.messages.delete({ id: id });
+    await this.messages.delete({ id: id });
     return await (
       await this.channels.findOne({
         where: { id: messageSender.channel.id },
@@ -70,9 +69,8 @@ export class ChatService {
     return channel.messages;
   }
 
-  async isChannelExists(name: string | number): Promise<boolean> {
-    const condition = typeof name === 'string' ? { name } : { id: name };
-    return !!this.channels.find({ where: condition });
+  async isChannelExists(name: string): Promise<boolean> {
+    return !!(await this.channels.findOne({ where: { name } }));
   }
 
   async getChannels(): Promise<Channel[]> {

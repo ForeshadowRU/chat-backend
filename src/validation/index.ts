@@ -1,7 +1,6 @@
-import { ValidationError, BadRequestException } from '@nestjs/common';
+import { ValidationError, UnprocessableEntityException } from '@nestjs/common';
 
 export const exceptionFactory = (errors: ValidationError[]) => {
-  console.log(errors);
   let message = { message: 'Validation Failed', errors: [] };
   errors.forEach(error =>
     message.errors.push({
@@ -9,5 +8,5 @@ export const exceptionFactory = (errors: ValidationError[]) => {
       message: error.constraints[Object.keys(error.constraints)[0]],
     }),
   );
-  return new BadRequestException(message);
+  return new UnprocessableEntityException(message);
 };

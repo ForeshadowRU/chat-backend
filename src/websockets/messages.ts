@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/services/user';
 import { User } from 'src/models/user';
 import { ChatService } from 'src/services/chat';
-@WebSocketGateway()
+@WebSocketGateway(3900, { transports: ['websocket'] })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly jwtService: JwtService,
@@ -42,11 +42,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('message')
   async onChat(client: Socket, message) {
-    console.log('da');
+    console.log('DA');
     const user: User = await this.userService.find(
       this.jwtService.decode(client.handshake.query.token)['email'],
     );
-    console.log(message);
     try {
       const msg = await this.chatService.sendMessage(
         message.text,

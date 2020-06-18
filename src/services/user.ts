@@ -4,6 +4,7 @@ import { User } from 'src/models/user';
 import { Repository } from 'typeorm';
 import { hash } from 'bcrypt';
 import { JWT_GEN_SALT_ROUNDS } from 'src/constants';
+import { Message } from 'src/models/message';
 
 @Injectable()
 export class UserService {

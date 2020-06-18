@@ -13,7 +13,6 @@ export class AuthService {
 
   async login(googleToken: string): Promise<LoginResponse> {
     if (!googleToken) throw new BadRequestException('No token provided.');
-    console.log('token here');
     const decoded = this.jwtService.decode(googleToken);
 
     const data = {
