@@ -1,8 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { ChatGateway } from 'src/websockets/messages';
 
 @Injectable()
-export class AppService {
-  getHello(): string {
-    return 'Hello World!';
-  }
-}
+export class AppService {}

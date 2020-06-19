@@ -27,5 +27,6 @@ import { User } from 'src/models/user';
   ],
   controllers: [ChatController],
   providers: [ChatGateway, ChatService],
+  exports: [ChatGateway],
 })
 export class ChatModule {}

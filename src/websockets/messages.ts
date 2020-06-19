@@ -11,6 +11,8 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/services/user';
 import { User } from 'src/models/user';
 import { ChatService } from 'src/services/chat';
+import { Injectable } from '@nestjs/common';
+@Injectable()
 @WebSocketGateway(3900, { transports: ['websocket'] })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
@@ -20,6 +22,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {}
   @WebSocketServer() server: SocketIO.Server;
   users: number = 0;
+
+  getUsersCount() {
+    console.log(this.server.clients.length);
+    return this.server.clients.length;
+  }
 
   async handleConnection(client: Socket) {
     const token = client.handshake.query.token;

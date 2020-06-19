@@ -11,7 +11,6 @@ import {
 } from 'typeorm';
 import { Message } from './message';
 import { User } from './user';
-import { Server } from './server';
 
 @Entity()
 export class Channel {
@@ -25,6 +24,14 @@ export class Channel {
 
   @Column({ unique: true })
   public name: string;
+
+  @ManyToOne(
+    type => User,
+    user => user.channels,
+  )
+  @JoinColumn()
+  public createdBy: User;
+
   @ManyToMany(
     type => User,
     user => user.channels,

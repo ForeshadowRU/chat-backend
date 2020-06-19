@@ -53,4 +53,8 @@ export class ChatController {
   ): Promise<Message[]> {
     return this.chatService.deleteMessage(user, id);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/members')
+  async getMembers() {}
 }

@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   Table,
+  OneToMany,
 } from 'typeorm';
 import { Message } from './message';
 import { Channel } from './channel';
@@ -35,6 +36,7 @@ export class User {
   public firstname: string;
   @Column({ default: UserStatus.ONLINE })
   public status: UserStatus;
+
   @Column()
   public lastname: string;
   @Expose({ name: 'fullname' })
@@ -45,6 +47,12 @@ export class User {
   getInitials() {
     return `${this.firstname[0]} ${this.lastname[0]}`;
   }
+
+  @OneToMany(
+    type => Channel,
+    channel => channel.createdBy,
+  )
+  public ownedChannels: Array<Channel>;
   @ManyToMany(
     type => Channel,
     channel => channel.users,

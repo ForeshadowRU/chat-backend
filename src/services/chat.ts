@@ -32,7 +32,10 @@ export class ChatService {
         where: { id: messageSender.channel.id },
         relations: ['messages', 'messages.sender'],
       })
-    ).messages;
+    ).messages.map(message => ({
+      ...message,
+      editable: user.id === message.sender.id,
+    }));
   }
   async sendMessage(
     message: string,
@@ -59,14 +62,17 @@ export class ChatService {
       where: { id: channelId },
       relations: ['messages', 'messages.sender'],
       order: {
-        created_at: 'ASC',
+        created_at: 'DESC',
       },
     });
 
     if (!channel)
       throw new BadRequestException(`No channel with id = ${channelId}`);
     this.users.save({ ...user, last_channel: channelId });
-    return channel.messages;
+    return channel.messages.map(message => ({
+      ...message,
+      editable: user.id === message.sender.id,
+    }));
   }
 
   async isChannelExists(name: string): Promise<boolean> {
