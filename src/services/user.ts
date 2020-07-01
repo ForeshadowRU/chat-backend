@@ -10,7 +10,9 @@ export class UserService {
   async find(email: string) {
     return this.users.findOne({ where: { email } });
   }
-
+  async findAll() {
+    return await this.users.find();
+  }
   async save(user: User): Promise<User> {
     return this.users.save(user);
   }

@@ -3,7 +3,7 @@ import { join } from 'path';
 
 const config: ConnectionOptions = {
   type: 'mysql',
-  host: 'localhost',
+  host: '172.18.0.2',
   port: 3306,
   username: 'root',
   password: '123',

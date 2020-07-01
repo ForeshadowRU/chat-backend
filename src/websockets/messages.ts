@@ -1,7 +1,6 @@
 import {
   WebSocketGateway,
   SubscribeMessage,
-  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   WebSocketServer,
@@ -21,29 +20,39 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly chatService: ChatService,
   ) {}
   @WebSocketServer() server: SocketIO.Server;
-  users: number = 0;
+  users: Array<User> = [];
 
   getUsersCount() {
-    console.log(this.server.clients.length);
     return this.server.clients.length;
   }
 
   async handleConnection(client: Socket) {
     const token = client.handshake.query.token;
+    let user: User = null;
     if (!token) client.disconnect(true);
     try {
-      this.jwtService.decode(token);
+      const result = await this.jwtService.decode(token);
+      user = await this.userService.find(result['email']);
     } catch (e) {
       client.disconnect(true);
     }
-    this.users++;
+    this.users.push(user);
 
     this.server.emit('users', this.users);
   }
 
-  async handleDisconnect() {
-    this.users--;
-
+  async handleDisconnect(client: Socket) {
+    const token = client.handshake.query.token;
+    let user: User = null;
+    if (!token) client.disconnect(true);
+    try {
+      const result = await this.jwtService.decode(token);
+      user = await this.userService.find(result['email']);
+    } catch (e) {
+      client.disconnect(true);
+    }
+    console.log(user.id, 'disconneced');
+    this.users = this.users.filter(us => user.id === us.id);
     this.server.emit('users', this.users);
   }
 

@@ -15,10 +15,16 @@ import { Message } from 'src/models/message';
 import { Channel } from 'src/models/channel';
 import { CurrentUser } from 'src/decorators/currentUser';
 import { User } from 'src/models/user';
+import { UserService } from 'src/services/user';
+import { ChatGateway } from 'src/websockets/messages';
 
 @Controller('/')
 export class ChatController {
-  constructor(private readonly chatService: ChatService) {}
+  constructor(
+    private readonly chatService: ChatService,
+    private readonly userSerivce: UserService,
+    private readonly chatGate: ChatGateway,
+  ) {}
 
   @UseGuards(AuthGuard('jwt'))
   @Post('channels')
@@ -56,5 +62,10 @@ export class ChatController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('/members')
-  async getMembers() {}
+  async getMembers() {
+    return await (await this.userSerivce.findAll()).map(member => ({
+      ...member,
+      online: this.chatGate.users.map(usr => usr.id).includes(member.id),
+    }));
+  }
 }
