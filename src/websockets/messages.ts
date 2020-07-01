@@ -51,14 +51,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     } catch (e) {
       client.disconnect(true);
     }
-    console.log(user.id, 'disconneced');
     this.users = this.users.filter(us => user.id === us.id);
     this.server.emit('users', this.users);
   }
 
   @SubscribeMessage('message')
   async onChat(client: Socket, message) {
-    console.log('DA');
     const user: User = await this.userService.find(
       this.jwtService.decode(client.handshake.query.token)['email'],
     );
@@ -72,7 +70,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.emit('message', msg);
       return msg;
     } catch (e) {
-      console.log(e.message);
+      console.warn(e.message);
     }
   }
 }
