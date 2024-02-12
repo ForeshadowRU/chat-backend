@@ -5,7 +5,7 @@ import {
   OnGatewayDisconnect,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket, Client } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/services/user';
 import { User } from 'src/models/user';
@@ -19,15 +19,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly userService: UserService,
     private readonly chatService: ChatService,
   ) {}
-  @WebSocketServer() server: SocketIO.Server;
+  @WebSocketServer() server: Server;
   users: Array<User> = [];
 
   getUsersCount() {
-    return this.server.clients.length;
+    return 5
   }
 
   async handleConnection(client: Socket) {
-    const token = client.handshake.query.token;
+    const token = client.handshake.query.token as string;
     let user: User = null;
     if (!token) client.disconnect(true);
     try {
@@ -42,7 +42,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   async handleDisconnect(client: Socket) {
-    const token = client.handshake.query.token;
+    const token: string = client.handshake.query.token as string;
     let user: User = null;
     if (!token) client.disconnect(true);
     try {
@@ -58,7 +58,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('message')
   async onChat(client: Socket, message) {
     const user: User = await this.userService.find(
-      this.jwtService.decode(client.handshake.query.token)['email'],
+      this.jwtService.decode(client.handshake.query.token as string)['email'],
     );
     try {
       const msg = await this.chatService.sendMessage(

@@ -18,7 +18,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   async validate(payload: any) {
     let result: Partial<User> = await this.users.findOne({
-      email: payload.email,
+      where: {
+          email: payload.email,
+      }
     });
     if (!result) result = { email: payload.email };
     return result;

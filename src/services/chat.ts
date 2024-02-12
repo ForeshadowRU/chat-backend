@@ -44,7 +44,7 @@ export class ChatService {
   ): Promise<Message> {
     const msg = new Message({
       sender: sender,
-      channel: await this.channels.findOne({ id: channelId }),
+      channel: await this.channels.findOne({where: { id: channelId }}),
       text: message,
     });
     return this.messages.save(msg);
