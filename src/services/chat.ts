@@ -8,7 +8,7 @@ import { Message } from 'src/models/message';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/models/user';
-import { Channel } from 'src/models/channel';
+import { Channel } from 'src/models/channel.entity';
 
 @Injectable()
 export class ChatService {

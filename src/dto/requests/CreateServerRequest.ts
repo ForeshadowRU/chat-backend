@@ -1,8 +1,5 @@
 import {
-  IsEmail,
   IsNotEmpty,
-  IsBoolean,
-  ValidateIf,
   IsArray,
   IsNumber,
 } from 'class-validator';

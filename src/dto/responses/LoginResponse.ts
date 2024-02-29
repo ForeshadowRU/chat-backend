@@ -1,6 +1,7 @@
 import { User } from 'src/models/user';
 
-export type LoginResponse = {
-  auth_token: string;
+export class LoginResponse {
+  accessToken: string;
+  expiresAt: number;
   user: User;
 };

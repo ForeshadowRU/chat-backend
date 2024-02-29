@@ -9,7 +9,7 @@ import { UserModule } from './user';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from 'src/models/message';
 import { ChatController } from 'src/controllers/chat';
-import { Channel } from 'src/models/channel';
+import { Channel } from 'src/models/channel.entity';
 import { User } from 'src/models/user';
 @Module({
   imports: [

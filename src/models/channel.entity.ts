@@ -20,7 +20,7 @@ export class Channel {
   @PrimaryGeneratedColumn()
   public id: number;
   @Column()
-  public isPrivate: boolean; //forbid adding new
+  public isPrivate: boolean; 
 
   @Column({ unique: true })
   public name: string;

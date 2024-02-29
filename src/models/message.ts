@@ -6,7 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Channel } from './channel';
+import { Channel } from './channel.entity';
 import { User } from './user';
 
 @Entity()

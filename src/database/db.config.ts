@@ -22,7 +22,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       synchronize: true,
       migrationsRun: false,
       logging: true,
-      logger: 'file',
+      logger: 'advanced-console',
       migrations: [join(__dirname, '/migrations/**/*{.ts,.js}')],
     };
     console.log(config);
@@ -34,7 +34,7 @@ const { POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD } = process.env;
 // TypeORM Connection Config
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
-  host: 'localhost',
+  host: 'postgres',
   port: 5432,
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,

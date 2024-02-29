@@ -1,41 +1,50 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { User } from 'src/models/user';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from './user';
-import { LoginResponse } from 'src/dto/responses/LoginResponse';
 
+import { GoogleOAuth2Client } from './google/GoogleOAuth2Client';
+import { GoogleUserInfo } from './google/types';
+import { LoginResponse } from 'src/dto/responses/LoginResponse';
+import { instanceToPlain } from 'class-transformer';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly googleOAuth2Client: GoogleOAuth2Client,
   ) {}
 
-  async login(googleToken: string): Promise<LoginResponse> {
-    if (!googleToken) throw new BadRequestException('No token provided.');
-    const decoded = this.jwtService.decode(googleToken);
+  async login(code: string): Promise<LoginResponse> {
+    if (!code) throw new UnprocessableEntityException('Неверный код Google');
 
-    const data = {
-      firstname: decoded['given_name'],
-      lastname: decoded['family_name'],
-      avatar: decoded['picture'],
-      email: decoded['email'],
-    };
-    if (!(await this.userService.isUserExist(data.email))) {
-      const user = new User();
-      user.firstname = data['firstname'];
-      user.lastname = data['lastname'];
-      user.avatar = data['avatar'];
-      user.email = data['email'];
-      await this.userService.save(user);
+    const { tokens } = await this.googleOAuth2Client.getToken(code);
+
+    const userInfo: GoogleUserInfo = this.jwtService.decode(tokens.id_token, {
+      json: true,
+    });
+    let user = new User();
+    const isUserAlreadyExists = await this.userService.exists(userInfo.email);
+    if (!isUserAlreadyExists) {
+      user = await this.userService.save(
+        new User({
+          email: userInfo.email,
+          avatar: userInfo.picture,
+          firstname: userInfo.given_name,
+          lastname: userInfo.family_name,
+        }),
+      );
+    } else {
+      user = await this.userService.find(userInfo.email);
     }
-
     return {
-      auth_token: this.jwtService.sign(
-        { email: data['email'] },
-        { algorithm: 'HS256', issuer: 'shadow-chat', expiresIn: '1h' },
-      ),
-      user: await this.userService.find(data['email']),
+      accessToken: this.jwtService.sign(instanceToPlain(user), {
+        algorithm: 'HS256',
+        issuer: 'shadow-chat',
+        expiresIn: '1h',
+      }),
+      expiresAt: new Date().getTime() + 60 * 60 * 1000,
+      user: user,
     };
   }
 }

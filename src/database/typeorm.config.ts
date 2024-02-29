@@ -1,5 +1,4 @@
 import { DataSource } from 'typeorm';
-import { typeOrmConfig } from './db.config';
 import { join } from 'path';
 require('dotenv').config();
 const { POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD } = process.env;

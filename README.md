@@ -33,3 +33,8 @@
 1. Clone it with git clone.
 2. docker-compose build
 3. docker-compose up.
+
+
+# Git Tags
+
+old - Начало переписывания

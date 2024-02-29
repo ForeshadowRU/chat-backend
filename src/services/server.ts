@@ -2,7 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Message } from 'src/models/message';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Channel } from 'src/models/channel';
+import { Channel } from 'src/models/channel.entity';
 import { User } from 'src/models/user';
 
 @Injectable()

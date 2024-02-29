@@ -17,9 +17,9 @@ export class UserService {
     return this.users.save(user);
   }
 
-  async isUserExist(email: string): Promise<Boolean> {
-    return !!(await this.users.findOne({
+  async exists(email: string): Promise<Boolean> {
+    return await this.users.exists({
       where: { email },
-    }));
+    });
   }
 }

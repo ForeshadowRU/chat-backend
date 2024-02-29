@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { ServerService } from 'src/services/server';
 import { Message } from 'src/models/message';
-import { Channel } from 'src/models/channel';
+import { Channel } from 'src/models/channel.entity';
 import { Server } from 'src/models/server';
 import { CreateServerRequest } from 'src/dto/requests/CreateServerRequest';
 import { UserService } from 'src/services/user';

@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { User } from './user';
-import { Channel } from './channel';
+import { Channel } from './channel.entity';
 
 @Entity()
 export class Server {

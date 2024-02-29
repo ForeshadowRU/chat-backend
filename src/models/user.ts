@@ -11,7 +11,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Message } from './message';
-import { Channel } from './channel';
+import { Channel } from './channel.entity';
 import { Server } from './server';
 import { Exclude, Expose } from 'class-transformer';
 
@@ -31,7 +31,6 @@ export class User {
   public email: string;
   @Column({ nullable: true })
   public avatar: string;
-  @Column('char', { length: 60, nullable: true })
   @Column()
   public firstname: string;
   @Column({ default: UserStatus.ONLINE })
@@ -48,20 +47,11 @@ export class User {
     return `${this.firstname[0]} ${this.lastname[0]}`;
   }
 
-  @OneToMany(
-    type => Channel,
-    channel => channel.createdBy,
-  )
+  @OneToMany((type) => Channel, (channel) => channel.createdBy)
   public ownedChannels: Array<Channel>;
-  @ManyToMany(
-    type => Channel,
-    channel => channel.users,
-  )
+  @ManyToMany((type) => Channel, (channel) => channel.users)
   public channels: Array<Channel>;
-  @ManyToMany(
-    type => Server,
-    server => server.members,
-  )
+  @ManyToMany((type) => Server, (server) => server.members)
   public servers: Array<Server>;
 
   public messages: Array<Message>;
